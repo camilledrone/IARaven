@@ -103,6 +103,15 @@ void RocketLauncher::InitializeFuzzyModule()
   FzSet& Ammo_Okay = AmmoStatus.AddTriangularSet("Ammo_Okay", 0, 10, 30);
   FzSet& Ammo_Low = AmmoStatus.AddTriangularSet("Ammo_Low", 0, 0, 10);
 
+  FuzzyVariable& AmmoStatus = m_FuzzyModule.CreateFLV("Player_Life");
+  FzSet& Ammo_Loads = AmmoStatus.AddRightShoulderSet("Player_Life", 0, 20, 50);
+  FzSet& Ammo_Okay = AmmoStatus.AddTriangularSet("Player_Life", 20, 50, 80);
+  FzSet& Ammo_Low = AmmoStatus.AddTriangularSet("Player_Life", 50, 80, 100);
+
+  FuzzyVariable& AmmoStatus = m_FuzzyModule.CreateFLV("NbEnnemies");
+  FzSet& Ammo_Loads = AmmoStatus.AddRightShoulderSet("NbEnnemies", 0, 1, 3);
+  FzSet& Ammo_Okay = AmmoStatus.AddTriangularSet("NbEnnemies", 1, 3, 5);
+  FzSet& Ammo_Low = AmmoStatus.AddTriangularSet("NbEnnemies", 3, 5, 1000);
 
   m_FuzzyModule.AddRule(FzAND(Target_Close, Ammo_Loads), Undesirable);
   m_FuzzyModule.AddRule(FzAND(Target_Close, Ammo_Okay), Undesirable);
