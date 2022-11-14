@@ -26,6 +26,8 @@
 #include "goals/Goal_Think.h"
 #include "goals/Raven_Goal_Types.h"
 
+#include "debug/DebugConsole.h"
+
 
 
 //uncomment to write object creation/deletion to debug console
@@ -476,9 +478,58 @@ void Raven_Game::ClickRightMouseButton(POINTS p)
 //-----------------------------------------------------------------------------
 void Raven_Game::ClickLeftMouseButton(POINTS p)
 {
+  Raven_Bot* pBot = GetBotAtPosition(POINTStoVector(p));
+  bool didCommand;
+
+  didCommand = false; 
+
   if (m_pSelectedBot && m_pSelectedBot->isPossessed())
   {
-    m_pSelectedBot->FireWeapon(POINTStoVector(p));
+    // order to target an enemy
+    if (IS_KEY_PRESSED('T'))
+    {
+        didCommand = true;
+        // TODO All team members focus on one target
+        if (pBot != NULL) {
+            debug_con << "All members of teams focussing : " << pBot->ID() << "";
+        }
+        else {
+            debug_con << "No target in sight" << "";
+        }
+    }
+
+    // recruit a new member to the team
+    if (IS_KEY_PRESSED('R'))
+    {
+        didCommand = true;
+        if (m_pSelectedBot->GetTeam() == NULL) {
+            m_pSelectedBot->CreateTeam(); 
+        }
+
+        if (pBot != NULL && pBot != m_pSelectedBot) {
+            if (pBot->GetTeam() != NULL) {
+                debug_con << "Can't recruit, bot already in a team" << "";
+            }
+            else {
+                m_pSelectedBot->GetTeam()->AddMember(pBot);
+                m_pSelectedBot->GetTeam()->Describe();
+            }
+        }
+        else {
+            debug_con << "No new member in sight" << "";
+        }
+    }
+
+    // order for all members to go arround the leader to protecc him
+    if (IS_KEY_PRESSED('O'))
+    {
+        // TODO All team members go arround their leader
+        // 
+    }
+
+    if (didCommand == false) {
+        m_pSelectedBot->FireWeapon(POINTStoVector(p));
+    }
   }
 }
 
@@ -792,5 +843,17 @@ void Raven_Game::Render()
       gdi->TextColor(255,0,0);
       gdi->TextAtPos(GetClientCursorPosition(), "Queuing");
     }
+
+   if (IS_KEY_PRESSED('T') && m_pSelectedBot->isPossessed())
+   {
+       gdi->TextColor(0, 255, 0);
+       gdi->TextAtPos(GetClientCursorPosition(), "Targeting");
+   }
+
+   if (IS_KEY_PRESSED('R') && m_pSelectedBot->isPossessed())
+   {
+       gdi->TextColor(0, 255, 0);
+       gdi->TextAtPos(GetClientCursorPosition(), "Recruiting");
+   }
   }
 }

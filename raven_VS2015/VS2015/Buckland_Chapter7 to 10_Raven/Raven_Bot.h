@@ -16,6 +16,7 @@
 #include "game/MovingEntity.h"
 #include "misc/utils.h"
 #include "Raven_TargetingSystem.h"
+#include "Raven_Team.h"
 
 
 class Raven_PathPlanner;
@@ -28,6 +29,7 @@ class Raven_Bot;
 class Goal_Think;
 class Raven_WeaponSystem;
 class Raven_SensoryMemory;
+class Raven_Team;
 
 
 
@@ -66,6 +68,9 @@ private:
   //this handles all the weapons. and has methods for aiming, selecting and
   //shooting them
   Raven_WeaponSystem*                m_pWeaponSys;
+
+  //this is the team of the bot
+  Raven_Team* m_pTeam;
 
   //A regulator object limits the update frequency of a specific AI component
   Regulator*                         m_pWeaponSelectionRegulator;
@@ -110,7 +115,6 @@ private:
   //the buffer for the transformed vertices
   std::vector<Vector2D>              m_vecBotVBTrans;
 
-
   //bots shouldn't be copied, only created or respawned
   Raven_Bot(const Raven_Bot&);
   Raven_Bot& operator=(const Raven_Bot&);
@@ -121,6 +125,7 @@ private:
 
   //initializes the bot's VB with its geometry
   void          SetUpVertexBuffer();
+
 
 
 public:
@@ -160,6 +165,13 @@ public:
   void          SetSpawning(){m_Status = spawning;}
   void          SetDead(){m_Status = dead;}
   void          SetAlive(){m_Status = alive;}
+
+
+  //set the team
+  void			SetTeam(Raven_Team* team);
+
+  //create a team and join it as its leader
+  void			CreateTeam();
 
   //returns a value indicating the time in seconds it will take the bot
   //to reach the given position at its current speed.
@@ -209,6 +221,7 @@ public:
   Raven_Bot* const                   GetTargetBot()const{return m_pTargSys->GetTarget();}
   Raven_WeaponSystem* const          GetWeaponSys()const{return m_pWeaponSys;}
   Raven_SensoryMemory* const         GetSensoryMem()const{return m_pSensoryMem;}
+  Raven_Team* const					 GetTeam()const { return m_pTeam; }
 
 
 };

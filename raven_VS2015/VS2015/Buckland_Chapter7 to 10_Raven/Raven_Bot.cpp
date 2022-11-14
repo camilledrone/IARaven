@@ -44,6 +44,7 @@ Raven_Bot::Raven_Bot(Raven_Game* world,Vector2D pos):
                  m_iNumUpdatesHitPersistant((int)(FrameRate * script->GetDouble("HitFlashTime"))),
                  m_bHit(false),
                  m_iScore(0),
+                 m_pTeam(NULL),
                  m_Status(spawning),
                  m_bPossessed(false),
                  m_dFieldOfView(DegsToRads(script->GetDouble("Bot_FOV")))
@@ -100,6 +101,7 @@ Raven_Bot::~Raven_Bot()
   delete m_pVisionUpdateRegulator;
   delete m_pWeaponSys;
   delete m_pSensoryMem;
+  delete m_pTeam;
 }
 
 //------------------------------- Spawn ---------------------------------------
@@ -387,6 +389,26 @@ void Raven_Bot::FireWeapon(Vector2D pos)
   m_pWeaponSys->ShootAt(pos);
 }
 
+
+//---------------------------- SetTeam -------------------------------------
+//
+//  set the team
+//-----------------------------------------------------------------------------
+void Raven_Bot::SetTeam(Raven_Team* team)
+{
+    m_pTeam = team;
+}
+
+
+//---------------------------- CreateTeam -------------------------------------
+//
+//  create a team and join it as its leader
+//-----------------------------------------------------------------------------
+void Raven_Bot::CreateTeam()
+{
+    m_pTeam = new Raven_Team(this);
+}
+
 //----------------- CalculateExpectedTimeToReachPosition ----------------------
 //
 //  returns a value indicating the time in seconds it will take the bot
@@ -486,7 +508,13 @@ void Raven_Bot::Render()
 
   if (isDead() || isSpawning()) return;
   
-  gdi->BluePen();
+  if (m_pTeam != NULL) {
+      gdi->GreenPen();
+  }
+  else {
+      gdi->BluePen();
+  }
+  
   
   m_vecBotVBTrans = WorldTransform(m_vecBotVB,
                                    Pos(),
