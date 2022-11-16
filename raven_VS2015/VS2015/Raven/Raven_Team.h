@@ -25,6 +25,8 @@ private:
 	Raven_Bot*						m_leader;
 	//Members of the team
 	std::vector<Raven_Bot*>			m_members;
+	//Team color
+	int								m_icolor;
 
 
 	//teams shouldn't be copied, only created or respawned
@@ -47,6 +49,7 @@ public:
 	//methods for accessing attribute data
 	Raven_Bot*					Leader()const { return m_leader; }
 	std::vector<Raven_Bot*>		Members()const { return m_members; }
+	int							Color()const { return m_icolor; }
 
 };
 

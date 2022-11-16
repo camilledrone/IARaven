@@ -12,7 +12,8 @@
 //-------------------------- ctor ---------------------------------------------
 Raven_Team::Raven_Team(Raven_Bot* leader) :
     m_leader(leader),
-    m_members(NULL)
+    m_members(NULL),
+    m_icolor(RandInt(0,13))
 {
 
 }
