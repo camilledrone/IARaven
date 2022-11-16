@@ -74,6 +74,8 @@ double RocketLauncher::GetDesirability(double DistToTarget)
     //fuzzify distance and amount of ammo
     m_FuzzyModule.Fuzzify("DistToTarget", DistToTarget);
     m_FuzzyModule.Fuzzify("AmmoStatus", (double)m_iNumRoundsLeft);
+    m_FuzzyModule.Fuzzify("Player_Life", (double)m_pOwner->Health());
+    m_FuzzyModule.Fuzzify("Score", (double)m_pOwner->Score());
 
     m_dLastDesirabilityScore = m_FuzzyModule.DeFuzzify("Desirability", FuzzyModule::max_av);
   }
@@ -88,7 +90,6 @@ double RocketLauncher::GetDesirability(double DistToTarget)
 void RocketLauncher::InitializeFuzzyModule()
 {
   FuzzyVariable& DistToTarget = m_FuzzyModule.CreateFLV("DistToTarget");
-
   FzSet& Target_Close = DistToTarget.AddLeftShoulderSet("Target_Close",0,25,150);
   FzSet& Target_Medium = DistToTarget.AddTriangularSet("Target_Medium",25,150,300);
   FzSet& Target_Far = DistToTarget.AddRightShoulderSet("Target_Far",150,300,1000);
@@ -103,27 +104,43 @@ void RocketLauncher::InitializeFuzzyModule()
   FzSet& Ammo_Okay = AmmoStatus.AddTriangularSet("Ammo_Okay", 0, 10, 30);
   FzSet& Ammo_Low = AmmoStatus.AddTriangularSet("Ammo_Low", 0, 0, 10);
 
-  FuzzyVariable& Player_Life = m_FuzzyModule.CreateFLV("Player_Life");
-  FzSet& Player_Life_High = Player_Life.AddRightShoulderSet("Player_Life", 0, 20, 50);
-  FzSet& Player_Life_Medium = Player_Life.AddTriangularSet("Player_Life", 20, 50, 80);
-  FzSet& Player_Life_Low = Player_Life.AddTriangularSet("Player_Life", 50, 80, 100);
+  FuzzyVariable& Player_State_Life = m_FuzzyModule.CreateFLV("Player_Life");
+  FzSet& Player_State_Life_High = Player_State_Life.AddRightShoulderSet("Player_State_Life_High", 0, 20, 50);
+  FzSet& Player_State_Life_Medium = Player_State_Life.AddTriangularSet("Player_State_Life_Medium", 20, 50, 80);
+  FzSet& Player_State_Life_Low = Player_State_Life.AddTriangularSet("Player_State_Life_Low", 50, 80, 100);
 
-  FuzzyVariable& NbEnnemies = m_FuzzyModule.CreateFLV("NbEnnemies");
-  FzSet& NbEnnemies_High = NbEnnemies.AddRightShoulderSet("NbEnnemies", 0, 1, 3);
-  FzSet& NbEnnemies_Medium = NbEnnemies.AddTriangularSet("NbEnnemies", 1, 3, 5);
-  FzSet& NbEnnemies_Low = NbEnnemies.AddTriangularSet("NbEnnemies", 3, 5, 1000);
+  FuzzyVariable& Score = m_FuzzyModule.CreateFLV("Score");
+  FzSet& Score_High = Score.AddRightShoulderSet("Score_High", 0, 1, 3);
+  FzSet& Score_Medium = Score.AddTriangularSet("Score_Medium", 1, 3, 5);
+  FzSet& Score_Low = Score.AddTriangularSet("Score_Low", 3, 5, 1000);
 
-  m_FuzzyModule.AddRule(FzAND(Target_Close, Ammo_Loads), Undesirable);
-  m_FuzzyModule.AddRule(FzAND(Target_Close, Ammo_Okay), Undesirable);
-  m_FuzzyModule.AddRule(FzAND(Target_Close, Ammo_Low), Undesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Close, Ammo_Loads, Player_State_Life_High, Score_High), Undesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Close, Ammo_Okay, Player_State_Life_High, Score_Medium), Undesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Close, Ammo_Low, Player_State_Life_High, Score_Low), Undesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Close, Ammo_Low, Player_State_Life_Medium, Score_Medium), Undesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Close, Ammo_Low, Player_State_Life_Low, Score_High), Undesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Close, Ammo_Low, Player_State_Life_Low, Score_Low), Undesirable);
 
-  m_FuzzyModule.AddRule(FzAND(Target_Medium, Ammo_Loads), VeryDesirable);
-  m_FuzzyModule.AddRule(FzAND(Target_Medium, Ammo_Okay), VeryDesirable);
-  m_FuzzyModule.AddRule(FzAND(Target_Medium, Ammo_Low), Desirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Medium, Ammo_Loads, Player_State_Life_Low, Score_Low), VeryDesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Medium, Ammo_Loads, Player_State_Life_Low, Score_Medium), VeryDesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Medium, Ammo_Loads, Player_State_Life_Medium, Score_Low), VeryDesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Medium, Ammo_Loads, Player_State_Life_Medium, Score_Medium), VeryDesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Medium, Ammo_Okay, Player_State_Life_Low, Score_Low), VeryDesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Medium, Ammo_Okay, Player_State_Life_Medium, Score_Low), VeryDesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Medium, Ammo_Okay, Player_State_Life_Medium, Score_Medium), Desirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Medium, Ammo_Low, Player_State_Life_Low, Score_Low), VeryDesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Medium, Ammo_Low, Player_State_Life_Low, Score_Medium), Desirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Medium, Ammo_Low, Player_State_Life_Medium, Score_High), Desirable);
 
-  m_FuzzyModule.AddRule(FzAND(Target_Far, Ammo_Loads), Desirable);
-  m_FuzzyModule.AddRule(FzAND(Target_Far, Ammo_Okay), Undesirable);
-  m_FuzzyModule.AddRule(FzAND(Target_Far, Ammo_Low), Undesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Far, Ammo_Loads, Player_State_Life_Medium, Score_Low), Desirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Far, Ammo_Loads, Player_State_Life_Medium, Score_Medium), Desirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Far, Ammo_Loads, Player_State_Life_Medium, Score_High), Undesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Far, Ammo_Okay, Player_State_Life_Medium, Score_Low), Desirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Far, Ammo_Okay, Player_State_Life_High, Score_High), Undesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Far, Ammo_Okay, Player_State_Life_Medium, Score_High), Undesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Far, Ammo_Low, Player_State_Life_Low, Score_Low), Desirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Far, Ammo_Low, Player_State_Life_Low, Score_Medium), Undesirable);
+  m_FuzzyModule.AddRule(FzAND(Target_Far, Ammo_Low, Player_State_Life_High, Score_Medium), Undesirable);
 }
 
 
