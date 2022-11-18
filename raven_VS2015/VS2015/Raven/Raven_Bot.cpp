@@ -82,6 +82,8 @@ Raven_Bot::Raven_Bot(Raven_Game* world,Vector2D pos):
                                         script->GetDouble("Bot_AimPersistance"));
 
   m_pSensoryMem = new Raven_SensoryMemory(this, script->GetDouble("Bot_MemorySpan"));
+
+  debug_con << "\nm_dMaxSpeed : " << m_dMaxSpeed;
 }
 
 //-------------------------------- dtor ---------------------------------------

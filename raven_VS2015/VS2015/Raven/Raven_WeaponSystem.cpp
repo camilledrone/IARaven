@@ -9,7 +9,10 @@
 #include "Raven_Game.h"
 #include "Raven_UserOptions.h"
 #include "2D/transformations.h"
+#include "fuzzy/FuzzyOperators.h"
+#include "Raven_SensoryMemory.h"
 
+#include "debug/DebugConsole.h"
 
 
 //------------------------- ctor ----------------------------------------------
@@ -23,6 +26,8 @@ Raven_WeaponSystem::Raven_WeaponSystem(Raven_Bot* owner,
                                                           m_dAimPersistance(AimPersistance)
 {
   Initialize();
+  //setup the fuzzy module
+  InitializeFuzzyModule();
 }
 
 //------------------------- dtor ----------------------------------------------
@@ -57,6 +62,85 @@ void Raven_WeaponSystem::Initialize()
   m_WeaponMap[type_shotgun]         = 0;
   m_WeaponMap[type_rail_gun]        = 0;
   m_WeaponMap[type_rocket_launcher] = 0;
+}
+
+//---------------------------- Deviation -----------------------------------
+// change and return the accuracy for a shoot, using fuzzification
+//-----------------------------------------------------------------------------
+double Raven_WeaponSystem::GetDeviation(double DistToTarget)
+{
+    //fuzzify distance, velocity of the owner and the visibilty period (time) of the target
+    m_FuzzyModule.Fuzzify("DistToTarget", DistToTarget);
+
+    Vector2D velocity = m_pOwner->Velocity();
+    velocity.Truncate(m_pOwner->MaxSpeed());
+    m_FuzzyModule.Fuzzify("Velocity", velocity.Length());
+    
+    double visibilty = m_pOwner->GetSensoryMem()->GetTimeOpponentHasBeenVisible(m_pOwner->GetTargetSys()->GetTarget());
+    m_FuzzyModule.Fuzzify("Visibility_Period", visibilty);
+
+    m_dAimAccuracy = m_FuzzyModule.DeFuzzify("Deviation", FuzzyModule::max_av);
+    return m_dAimAccuracy;
+}
+
+//-------------------------  InitializeFuzzyModule ----------------------------
+//
+//  set up fuzzy variables and rules
+// The deviation of a shoot is depending on the distance to the target, the shooter's velocity, and the time he target has been visible
+//-----------------------------------------------------------------------------
+void Raven_WeaponSystem::InitializeFuzzyModule()
+{
+    FuzzyVariable& DistToTarget = m_FuzzyModule.CreateFLV("DistToTarget");
+    FzSet& Target_Close = DistToTarget.AddLeftShoulderSet("Target_Close", 0, 25, 150);
+    FzSet& Target_Medium = DistToTarget.AddTriangularSet("Target_Medium", 25, 150, 300);
+    FzSet& Target_Far = DistToTarget.AddRightShoulderSet("Target_Far", 150, 300, 1000);
+
+    FuzzyVariable& Deviation = m_FuzzyModule.CreateFLV("Deviation");
+    FzSet& VeryDeviaited = Deviation.AddRightShoulderSet("VeryDeviaited", 0.1, 0.15, 0.2);
+    FzSet& Deviaited = Deviation.AddTriangularSet("Deviaited", 0.05, 0.1, 0.15);
+    FzSet& Undeviated = Deviation.AddLeftShoulderSet("Undeviated", 0, 0.05, 0.1);
+
+    FuzzyVariable& Velocity = m_FuzzyModule.CreateFLV("Velocity");
+    FzSet& Velocity_Low = Velocity.AddRightShoulderSet("Velocity_Low", 0.5, 0.8, 1);
+    FzSet& Velocity_Medium = Velocity.AddTriangularSet("Velocity_Medium", 0.3, 0.5, 0.8);
+    FzSet& Velocity_High = Velocity.AddLeftShoulderSet("Velocity_High", 0, 0.3, 0.5);
+
+    FuzzyVariable& Visibility_Period = m_FuzzyModule.CreateFLV("Visibility_Period");
+    FzSet& Visibility_Period_Short = Visibility_Period.AddRightShoulderSet("Visibility_Period_Short", 0, 20, 50);
+    FzSet& Visibility_Period_Medium = Visibility_Period.AddTriangularSet("Visibility_Period_Medium", 20, 50, 80);
+    FzSet& Visibility_Period_Long = Visibility_Period.AddTriangularSet("Visibility_Period_Long", 50, 80, 10000000);
+
+    
+    m_FuzzyModule.AddRule(FzAND(Target_Close, Velocity_Low, Visibility_Period_Short), Undeviated);
+    m_FuzzyModule.AddRule(FzAND(Target_Close, Velocity_Low, Visibility_Period_Medium), Undeviated);
+    m_FuzzyModule.AddRule(FzAND(Target_Close, Velocity_Low, Visibility_Period_Long), Undeviated);
+    m_FuzzyModule.AddRule(FzAND(Target_Close, Velocity_Medium, Visibility_Period_Short), Undeviated);
+    m_FuzzyModule.AddRule(FzAND(Target_Close, Velocity_Medium, Visibility_Period_Medium), Undeviated);
+    m_FuzzyModule.AddRule(FzAND(Target_Close, Velocity_Medium, Visibility_Period_Long), Undeviated);
+    m_FuzzyModule.AddRule(FzAND(Target_Close, Velocity_High, Visibility_Period_Short), Deviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Close, Velocity_High, Visibility_Period_Medium), Deviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Close, Velocity_High, Visibility_Period_Long), Undeviated);
+
+    m_FuzzyModule.AddRule(FzAND(Target_Medium, Velocity_Low, Visibility_Period_Short), Deviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Medium, Velocity_Low, Visibility_Period_Medium), Deviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Medium, Velocity_Low, Visibility_Period_Long), Deviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Medium, Velocity_Medium, Visibility_Period_Short), VeryDeviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Medium, Velocity_Medium, Visibility_Period_Medium), VeryDeviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Medium, Velocity_Medium, Visibility_Period_Long), Deviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Medium, Velocity_High, Visibility_Period_Short), VeryDeviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Medium, Velocity_High, Visibility_Period_Medium), VeryDeviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Medium, Velocity_High, Visibility_Period_Long), Deviaited);
+
+    m_FuzzyModule.AddRule(FzAND(Target_Far, Velocity_Low, Visibility_Period_Short), VeryDeviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Far, Velocity_Low, Visibility_Period_Medium), Deviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Far, Velocity_Low, Visibility_Period_Long), Deviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Far, Velocity_Medium, Visibility_Period_Short), VeryDeviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Far, Velocity_Medium, Visibility_Period_Medium), VeryDeviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Far, Velocity_Medium, Visibility_Period_Long), VeryDeviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Far, Velocity_High, Visibility_Period_Short), VeryDeviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Far, Velocity_High, Visibility_Period_Medium), VeryDeviaited);
+    m_FuzzyModule.AddRule(FzAND(Target_Far, Velocity_High, Visibility_Period_Long), VeryDeviaited);
+    
 }
 
 //-------------------------------- SelectWeapon -------------------------------
@@ -173,8 +257,9 @@ void Raven_WeaponSystem::ChangeWeapon(unsigned int type)
 //  this method aims the bots current weapon at the target (if there is a
 //  target) and, if aimed correctly, fires a round
 //-----------------------------------------------------------------------------
-void Raven_WeaponSystem::TakeAimAndShoot()const
+void Raven_WeaponSystem::TakeAimAndShoot()
 {
+    debug_con << "\naccuracy :" << m_dAimAccuracy;
   //aim the weapon only if the current target is shootable or if it has only
   //very recently gone out of view (this latter condition is to ensure the 
   //weapon is aimed at the target even if it temporarily dodges behind a wall
@@ -185,7 +270,6 @@ void Raven_WeaponSystem::TakeAimAndShoot()const
   {
     //the position the weapon will be aimed at
     Vector2D AimingPos = m_pOwner->GetTargetBot()->Pos();
-    
     //if the current weapon is not an instant hit type gun the target position
     //must be adjusted to take into account the predicted movement of the 
     //target
@@ -202,7 +286,7 @@ void Raven_WeaponSystem::TakeAimAndShoot()const
             m_dReactionTime) &&
            m_pOwner->hasLOSto(AimingPos) )
       {
-        AddNoiseToAim(AimingPos);
+          AddDeviationToAim(AimingPos);
 
         GetCurrentWeapon()->ShootAt(AimingPos);
       }
@@ -217,7 +301,7 @@ void Raven_WeaponSystem::TakeAimAndShoot()const
            (m_pOwner->GetTargetSys()->GetTimeTargetHasBeenVisible() >
             m_dReactionTime) )
       {
-        AddNoiseToAim(AimingPos);
+          AddDeviationToAim(AimingPos);
         
         GetCurrentWeapon()->ShootAt(AimingPos);
       }
@@ -233,16 +317,16 @@ void Raven_WeaponSystem::TakeAimAndShoot()const
   }
 }
 
-//---------------------------- AddNoiseToAim ----------------------------------
+//---------------------------- AddDeviationToAim ----------------------------------
 //
-//  adds a random deviation to the firing angle not greater than m_dAimAccuracy 
-//  rads
+//  adds a deviation to the firing angle 
 //-----------------------------------------------------------------------------
-void Raven_WeaponSystem::AddNoiseToAim(Vector2D& AimingPos)const
+void Raven_WeaponSystem::AddDeviationToAim(Vector2D& AimingPos)
 {
   Vector2D toPos = AimingPos - m_pOwner->Pos();
-
-  Vec2DRotateAroundOrigin(toPos, RandInRange(-m_dAimAccuracy, m_dAimAccuracy));
+  double DistToTarget = Vec2DDistance(m_pOwner->Pos(), m_pOwner->GetTargetSys()->GetTarget()->Pos());
+  double deviation = GetDeviation(DistToTarget);
+  Vec2DRotateAroundOrigin(toPos, deviation);
 
   AimingPos = toPos + m_pOwner->Pos();
 }
