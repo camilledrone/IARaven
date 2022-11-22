@@ -70,7 +70,10 @@ private:
   Raven_WeaponSystem*                m_pWeaponSys;
 
   //this is the team of the bot
-  Raven_Team* m_pTeam;
+  Raven_Team*						 m_pTeam;
+
+  //Targetted bot ID
+  Raven_Bot*					     m_pFocusedBot;
 
   //A regulator object limits the update frequency of a specific AI component
   Regulator*                         m_pWeaponSelectionRegulator;
@@ -173,6 +176,9 @@ public:
   //create a team and join it as its leader
   void			CreateTeam();
 
+  //set the focused bot
+  void			SetFocusedBot(Raven_Bot* focusedBot);
+
   //returns a value indicating the time in seconds it will take the bot
   //to reach the given position at its current speed.
   double        CalculateTimeToReachPosition(Vector2D pos)const; 
@@ -222,6 +228,7 @@ public:
   Raven_WeaponSystem* const          GetWeaponSys()const{return m_pWeaponSys;}
   Raven_SensoryMemory* const         GetSensoryMem()const{return m_pSensoryMem;}
   Raven_Team* const					 GetTeam()const { return m_pTeam; }
+  Raven_Bot* const					 GetFocusedBot()const { return m_pFocusedBot;  }
 
 
 };

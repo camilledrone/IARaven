@@ -15,7 +15,6 @@ Raven_Team::Raven_Team(Raven_Bot* leader) :
     m_members(NULL),
     m_icolor(RandInt(0,13))
 {
-
 }
 
 //-------------------------------- dtor ---------------------------------------
@@ -35,64 +34,41 @@ Raven_Team::~Raven_Team()
 //-----------------------------------------------------------------------------
 bool Raven_Team::HandleMessage(const Telegram& msg)
 {
-    // TODO
-    ////first see if the current goal accepts the message
-    //if (GetBrain()->HandleMessage(msg)) return true;
+    // TODO (voir comment gérer l'ExtraInfo pour pouvoir envoyer dans le message
+    //// la cible à focus)
+    //int tempSender = msg.Sender;
+    //void* pTargetID = msg.ExtraInfo;
 
     ////handle any messages not handles by the goals
     //switch (msg.Msg)
     //{
-    //case Msg_TakeThatMF:
+    //case Msg_AllUnitsFocusTarget:
+    //    debug_con << "All members of teams focussing : " << &pTargetID << "";
+    //    // Checks if the sender of the message is the Leader of the team
+    //    if (tempSender != Leader()->ID()) {
+    //        debug_con << "You must be the leader of the team to order that !" << "";
+    //        return true;
+    //    }
 
-    //    //just return if already dead or spawning
-    //    if (isDead() || isSpawning()) return true;
-
-    //    //the extra info field of the telegram carries the amount of damage
-    //    ReduceHealth(DereferenceToType<int>(msg.ExtraInfo));
-
-    //    //if this bot is now dead let the shooter know
-    //    if (isDead())
+    //    // Send a message to all team members telling which enemy they should focus
+    //    for each (Raven_Bot * member in m_members)
     //    {
     //        Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-    //            ID(),
+    //            member->ID(),
     //            msg.Sender,
-    //            Msg_YouGotMeYouSOB,
-    //            NO_ADDITIONAL_INFO);
+    //            Msg_FocusTarget,
+    //            pTargetID);
     //    }
 
-    //    return true;
+    //    // Send a message to the leader for the same reason
+    //    Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+    //        Leader()->ID(),
+    //        msg.Sender,
+    //        Msg_FocusTarget,
+    //        pTargetID);
 
-    //case Msg_YouGotMeYouSOB:
-
-    //    IncrementScore();
-
-    //    //the bot this bot has just killed should be removed as the target
-    //    m_pTargSys->ClearTarget();
-
-    //    return true;
-
-    //case Msg_GunshotSound:
-
-    //    //add the source of this sound to the bot's percepts
-    //    GetSensoryMem()->UpdateWithSoundSource((Raven_Bot*)msg.ExtraInfo);
 
     //    return true;
-
-    //case Msg_UserHasRemovedBot:
-    //{
-
-    //    Raven_Bot* pRemovedBot = (Raven_Bot*)msg.ExtraInfo;
-
-    //    GetSensoryMem()->RemoveBotFromMemory(pRemovedBot);
-
-    //    //if the removed bot is the target, make sure the target is cleared
-    //    if (pRemovedBot == GetTargetSys()->GetTarget())
-    //    {
-    //        GetTargetSys()->ClearTarget();
-    //    }
-
-    //    return true;
-    //}
 
 
     //default: return false;

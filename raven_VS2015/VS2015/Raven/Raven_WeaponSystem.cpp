@@ -259,7 +259,7 @@ void Raven_WeaponSystem::ChangeWeapon(unsigned int type)
 //-----------------------------------------------------------------------------
 void Raven_WeaponSystem::TakeAimAndShoot()
 {
-    debug_con << "\naccuracy :" << m_dAimAccuracy;
+    //debug_con << "\naccuracy :" << m_dAimAccuracy;
   //aim the weapon only if the current target is shootable or if it has only
   //very recently gone out of view (this latter condition is to ensure the 
   //weapon is aimed at the target even if it temporarily dodges behind a wall

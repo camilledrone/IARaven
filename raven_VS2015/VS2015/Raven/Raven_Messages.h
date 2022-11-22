@@ -20,7 +20,9 @@ enum message_type
   Msg_GoalQueueEmpty,
   Msg_OpenSesame,
   Msg_GunshotSound,
-  Msg_UserHasRemovedBot
+  Msg_UserHasRemovedBot,
+  Msg_AllUnitsFocusTarget,
+  Msg_FocusTarget
 };
 
 //used for outputting debug info
@@ -59,6 +61,14 @@ inline std::string MessageToString(int msg)
   case Msg_UserHasRemovedBot:
 
     return "Msg_UserHasRemovedBot";
+
+  case Msg_AllUnitsFocusTarget:
+
+      return "Msg_AllUnitsFocusTarget";
+
+  case Msg_FocusTarget:
+
+      return "Msg_FocusTarget";
 
   default:
 

@@ -487,14 +487,32 @@ void Raven_Game::ClickLeftMouseButton(POINTS p)
   {
     // order to target an enemy
     if (IS_KEY_PRESSED('T'))
-    {
+    {   
+        
         didCommand = true;
+
         // TODO All team members focus on one target
-        if (pBot != NULL) {
-            debug_con << "All members of teams focussing : " << pBot->ID() << "";
+        if (pBot != NULL && m_pSelectedBot->GetTeam() != NULL && (m_pSelectedBot->GetTeam()->Leader()->ID() == m_pSelectedBot->ID()) ) {
+            
+            Raven_Bot* tempTarget = pBot;
+            void* pTarget = tempTarget;
+
+            for each (Raven_Bot * member in m_pSelectedBot->GetTeam()->Members()) {
+                Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+                    SENDER_ID_IRRELEVANT,
+                    member->ID(),
+                    Msg_FocusTarget,
+                    pTarget);
+            }
+
+            Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+                SENDER_ID_IRRELEVANT, 
+                m_pSelectedBot->ID(),
+                Msg_FocusTarget,
+                pTarget);
         }
         else {
-            debug_con << "No target in sight" << "";
+            debug_con << "Cannot target" << "";
         }
     }
 
@@ -811,6 +829,25 @@ void Raven_Game::Render()
       gdi->Line(p.x+b, p.y+b, p.x-b, p.y+b);
       gdi->Line(p.x-b, p.y+b, p.x-b, p.y-b);
     }
+
+    //render a square around the bot's target
+    if (m_pSelectedBot->GetFocusedBot())
+    {
+
+        gdi->RedPen();
+
+        Vector2D p = m_pSelectedBot->GetFocusedBot()->Pos();
+        double   b = m_pSelectedBot->GetFocusedBot()->BRadius();
+
+        gdi->Line(p.x + b, p.y, p.x + b + b, p.y);
+        gdi->Line(p.x - b, p.y, p.x - b - b, p.y);
+        gdi->Line(p.x, p.y + b, p.x, p.y + b + b);
+        gdi->Line(p.x, p.y - b, p.x, p.y - b - b);
+        //gdi->Line(p.x + b, p.y - b, p.x + b, p.y + b);
+        //gdi->Line(p.x + b, p.y + b, p.x - b, p.y + b);
+        //gdi->Line(p.x - b, p.y + b, p.x - b, p.y - b);
+    }
+
 
 
 

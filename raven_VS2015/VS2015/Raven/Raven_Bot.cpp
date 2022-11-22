@@ -39,6 +39,7 @@ Raven_Bot::Raven_Bot(Raven_Game* world,Vector2D pos):
                  m_iHealth(script->GetInt("Bot_MaxHealth")),
                  m_pPathPlanner(NULL),
                  m_pSteering(NULL),
+                 m_pFocusedBot(NULL),
                  m_pWorld(world),
                  m_pBrain(NULL),
                  m_iNumUpdatesHitPersistant((int)(FrameRate * script->GetDouble("HitFlashTime"))),
@@ -221,9 +222,14 @@ bool Raven_Bot::isReadyForTriggerUpdate()const
 //-----------------------------------------------------------------------------
 bool Raven_Bot::HandleMessage(const Telegram& msg)
 {
+    Raven_Bot* tempExtraInfo;
+    if (msg.Msg == Msg_FocusTarget) {
+        tempExtraInfo = (Raven_Bot*)msg.ExtraInfo;
+    }
   //first see if the current goal accepts the message
   if (GetBrain()->HandleMessage(msg)) return true;
  
+
   //handle any messages not handles by the goals
   switch(msg.Msg)
   {
@@ -278,6 +284,16 @@ bool Raven_Bot::HandleMessage(const Telegram& msg)
 
       return true;
     }
+
+  case Msg_FocusTarget:
+    {
+      debug_con << "targeting :" << tempExtraInfo->ID() << "";
+
+      SetFocusedBot(tempExtraInfo);
+
+      return true;
+    }
+
 
 
   default: return false;
@@ -409,6 +425,13 @@ void Raven_Bot::SetTeam(Raven_Team* team)
 void Raven_Bot::CreateTeam()
 {
     m_pTeam = new Raven_Team(this);
+}
+
+
+void Raven_Bot::SetFocusedBot(Raven_Bot* focusedBot)
+{
+
+    m_pFocusedBot = focusedBot;
 }
 
 //----------------- CalculateExpectedTimeToReachPosition ----------------------
