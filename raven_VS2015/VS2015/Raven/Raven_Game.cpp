@@ -22,6 +22,7 @@
 #include "armory/Projectile_Pellet.h"
 #include "armory/Projectile_Slug.h"
 #include "armory/Projectile_Bolt.h"
+#include "armory/Projectile_BombGrenade.h"
 
 #include "goals/Goal_Think.h"
 #include "goals/Raven_Goal_Types.h"
@@ -348,6 +349,19 @@ void Raven_Game::AddShotGunPellet(Raven_Bot* shooter, Vector2D target)
 }
 
 
+//------------------------- AddShotGunPellet -----------------------------------
+void Raven_Game::AddShotGrenade(Raven_Bot* shooter, Vector2D target)
+{
+    Raven_Projectile* gd = new BombGrenade(shooter, target);
+
+    m_Projectiles.push_back(gd);
+
+#ifdef LOG_CREATIONAL_STUFF
+    debug_con << "Adding a grenade " << rp->ID() << " at pos " << rp->Pos() << "";
+#endif
+}
+
+
 //----------------------------- GetBotAtPosition ------------------------------
 //
 //  given a position on the map this method returns the bot found with its
@@ -591,6 +605,10 @@ void Raven_Game::ChangeWeaponOfPossessedBot(unsigned int weapon)const
     case type_rail_gun:
       
       PossessedBot()->ChangeWeapon(type_rail_gun); return;
+
+    case type_grenade:
+
+        PossessedBot()->ChangeWeapon(type_grenade); return;
 
     }
   }

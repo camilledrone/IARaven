@@ -84,6 +84,17 @@ void Trigger_WeaponGiver::Render()
 
         break;
 
+      case type_grenade:
+      {
+          gdi->PurplePen();
+          gdi->BlackBrush();
+          gdi->Circle(Pos(), 3);
+          gdi->ThickBluePen();
+          gdi->Line(Pos(), Vector2D(Pos().x, Pos().y - 9));
+      }
+
+      break;
+
       case type_shotgun:
         {
 

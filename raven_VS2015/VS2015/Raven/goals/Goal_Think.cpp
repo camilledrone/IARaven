@@ -29,6 +29,7 @@ Goal_Think::Goal_Think(Raven_Bot* pBot):Goal_Composite<Raven_Bot>(pBot, goal_thi
 
   double HealthBias = RandInRange(LowRangeOfBias, HighRangeOfBias);
   double ShotgunBias = RandInRange(LowRangeOfBias, HighRangeOfBias);
+  double GrenadeBias = RandInRange(LowRangeOfBias, HighRangeOfBias);
   double RocketLauncherBias = RandInRange(LowRangeOfBias, HighRangeOfBias);
   double RailgunBias = RandInRange(LowRangeOfBias, HighRangeOfBias);
   double ExploreBias = RandInRange(LowRangeOfBias, HighRangeOfBias);
@@ -40,6 +41,8 @@ Goal_Think::Goal_Think(Raven_Bot* pBot):Goal_Composite<Raven_Bot>(pBot, goal_thi
   m_Evaluators.push_back(new AttackTargetGoal_Evaluator(AttackBias));
   m_Evaluators.push_back(new GetWeaponGoal_Evaluator(ShotgunBias,
                                                      type_shotgun));
+  m_Evaluators.push_back(new GetWeaponGoal_Evaluator(GrenadeBias,
+      type_grenade));
   m_Evaluators.push_back(new GetWeaponGoal_Evaluator(RailgunBias,
                                                      type_rail_gun));
   m_Evaluators.push_back(new GetWeaponGoal_Evaluator(RocketLauncherBias,

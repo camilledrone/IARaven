@@ -271,6 +271,12 @@
     <ClCompile Include="Raven_Team.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="armory\Weapon_Grenade.cpp">
+      <Filter>Game\weapons &amp; projectiles\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="armory\Projectile_BombGrenade.cpp">
+      <Filter>Game\weapons &amp; projectiles\projectiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Raven_Bot.h">
@@ -611,6 +617,12 @@
     </ClInclude>
     <ClInclude Include="Raven_Team.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="armory\Weapon_Grenade.h">
+      <Filter>Game\weapons &amp; projectiles\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="armory\Projectile_BombGrenade.h">
+      <Filter>Game\weapons &amp; projectiles\projectiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
