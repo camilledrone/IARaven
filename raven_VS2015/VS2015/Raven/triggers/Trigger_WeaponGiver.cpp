@@ -89,8 +89,6 @@ void Trigger_WeaponGiver::Render()
           gdi->PurplePen();
           gdi->BlackBrush();
           gdi->Circle(Pos(), 3);
-          gdi->ThickBluePen();
-          gdi->Line(Pos(), Vector2D(Pos().x, Pos().y - 9));
       }
 
       break;
