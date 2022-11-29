@@ -21,3 +21,13 @@ La déviation d’un tir –trajectoire d’une balle- est en fonction des varia
 - la période pendant laquelle la cible est demeurée visible - short, medium, long -
 
 Cette fuzzification a été ajoutée à la classe 'Raven_WeaponSystem', et la deviation est ajoutee dans l'appel de la fonction 'TakeAimAndShoot'.
+
+
+
+
+### #Bonus
+#### Creation d'une nouvelle arme : grenade
+Creation d'une nouvelle arme grenade et son projectile associe : bombe grenade. La particularite de ce projectile est qu'il est à usage unique.
+La creation de cette arme et de ce projectile ont necessite des changements dans beaucoup de fichiers : dans les fichiers main, du jeu, du systeme des armes, de la gestion des buts, les paramtres, etc.
+La map initiale a été modifée pour generer une grenade au debut du jeu (cercle simple noir).
+
