@@ -104,7 +104,6 @@ Raven_Bot::~Raven_Bot()
   delete m_pVisionUpdateRegulator;
   delete m_pWeaponSys;
   delete m_pSensoryMem;
-  delete m_pTeam;
 }
 
 //------------------------------- Spawn ---------------------------------------
