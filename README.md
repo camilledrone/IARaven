@@ -6,6 +6,8 @@ Il s’agit de simuler des agents –bots- qui s’entretuent. Chaque agent est 
 ## Améliorations
 
 ### #1 Amelioration de la fuzzification pour le choix d’une arme de type 'RocketLauncher'
+_ Camille Boucher _
+
 Augmentation à 5 ensembles flous : 
 - distance de la cible - close , medium, far - 
 - etat des munitions - loads, okay, low -
@@ -15,6 +17,8 @@ Augmentation à 5 ensembles flous :
 
 
 ### #2 Introduction d'un comportement flou pour la visée du tir
+_ Camille Boucher _
+
 La déviation d’un tir –trajectoire d’une balle- est en fonction des variables floues suivantes : 
 - la distance à la cible - close , medium, far - 
 - la vélocité  - low, medium, high - 
@@ -27,6 +31,8 @@ Cette fuzzification a été ajoutée à la classe 'Raven_WeaponSystem', et la de
 
 ### #Bonus
 #### Creation d'une nouvelle arme : grenade
+_ Camille Boucher _
+
 Creation d'une nouvelle arme grenade et son projectile associe : bombe grenade. La particularite de ce projectile est qu'il est à usage unique.
 La creation de cette arme et de ce projectile ont necessite des changements dans beaucoup de fichiers : dans les fichiers main, du jeu, du systeme des armes, de la gestion des buts, les paramtres, etc.
 La map initiale a été modifée pour generer une grenade au debut du jeu (cercle simple noir).
