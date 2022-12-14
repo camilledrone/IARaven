@@ -67,8 +67,8 @@ Ajout du comportement de déplacement OffsetPursuit. Pour déclencher ce comport
 
 ## Membres du groupe
 
-* [Tristan Badana](mailto:tbadana@etu.uqac.ca)
-* [Alexandre Bourdarie](mailto:abourdarie@etu.uqac.ca)
-* [Camille Boucher](mailto:cboucher17@etu.uqac.ca)
-* [Nathan Guerin](mailto:nguerin5@etu.uqac.ca)
-* [Evan Touzet](mailto:etouzet@etu.uqac.ca)
+* [Tristan Badana (BADT14010201)](mailto:tbadana@etu.uqac.ca)
+* [Alexandre Bourdarie (BOUA28070007)](mailto:abourdarie@etu.uqac.ca)
+* [Camille Boucher (BOUC19590002)](mailto:cboucher17@etu.uqac.ca)
+* [Nathan Guerin (GUEN17020208)](mailto:nguerin5@etu.uqac.ca)
+* [Evan Touzet (TOUE21120104)](mailto:etouzet@etu.uqac.ca)
