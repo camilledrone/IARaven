@@ -26,7 +26,10 @@ La déviation d’un tir –trajectoire d’une balle- est en fonction des varia
 
 Cette fuzzification a été ajoutée à la classe 'Raven_WeaponSystem', et la deviation est ajoutee dans l'appel de la fonction 'TakeAimAndShoot'.
 
+### #3 Ajout d'un nouveau but
+_ Evan Touzet _
 
+Ajout d'un nouveau but, lorsque le bot fait partie d'une équipe, il peut prendre la décision de rejoindre son leader afin de pouvoir attaquer des ennemis à plusieurs. 
 
 
 ### #Bonus
