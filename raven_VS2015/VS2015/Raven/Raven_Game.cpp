@@ -163,6 +163,12 @@ void Raven_Game::Update()
     //then change its status to 'respawning'
     else if ((*curBot)->isDead())
     {
+      //if in a team, give his weapon to another member
+      if ((*curBot)->GetTeam())
+      {
+          (*curBot)->GetWeaponSys()->GetCurrentWeapon();
+      }
+
       //create a grave
       m_pGraveMarkers->AddGrave((*curBot)->Pos());
 
@@ -478,12 +484,11 @@ void Raven_Game::ClickRightMouseButton(POINTS p)
     {
       m_pSelectedBot->GetBrain()->QueueGoal_MoveToPosition(POINTStoVector(p));
     }
-    else
-    {
-      //clear any current goals
-      m_pSelectedBot->GetBrain()->RemoveAllSubgoals();
+    else {
+        //clear any current goals
+        m_pSelectedBot->GetBrain()->RemoveAllSubgoals();
 
-      m_pSelectedBot->GetBrain()->AddGoal_MoveToPosition(POINTStoVector(p));
+        m_pSelectedBot->GetBrain()->AddGoal_MoveToPosition(POINTStoVector(p));
     }
   }
 }
@@ -552,11 +557,42 @@ void Raven_Game::ClickLeftMouseButton(POINTS p)
         }
     }
 
-    // order for all members to go arround the leader to protecc him
+    // add a dropout location
+    if (IS_KEY_PRESSED('L'))
+    {
+        didCommand = true;
+
+        // if the possessed bot is a team leader,
+        // select a location where weapons dropped by a team member will go
+        if (m_pSelectedBot->GetTeam() && (m_pSelectedBot->GetTeam()->Leader() == m_pSelectedBot))
+        {
+            // if location is accessible, selects it
+            if (m_pSelectedBot->GetPathPlanner()->RequestPathToPosition(POINTStoVector(p)))
+            {
+                m_pSelectedBot->GetTeam()->SetDropoutLocation(p);
+            }
+            else
+            {
+                debug_con << "Bots can't drop weapons here." << "";
+            }
+        }
+    }
+
+    // order for all members to go arround the leader to protect him
     if (IS_KEY_PRESSED('O'))
     {
-        // TODO All team members go arround their leader
-        // 
+        // if the possessed bot is a team leader,
+        // all team members will protect him
+        if (m_pSelectedBot->GetTeam() && (m_pSelectedBot->GetTeam()->Leader() == m_pSelectedBot))
+        {
+            std::vector<Raven_Bot*> team = m_pSelectedBot->GetTeam()->Members();
+            // DEBUG
+            for (size_t i = 0; i < team.size(); i++)
+            {
+                team[i]->GetSteering()->OffsetPursuitOn(m_pSelectedBot, Vector2D(10, 10));
+            }
+        }
+        debug_con << "team now protects leader" << "";
     }
 
     if (didCommand == false) {
@@ -909,6 +945,11 @@ void Raven_Game::Render()
    {
        gdi->TextColor(0, 255, 0);
        gdi->TextAtPos(GetClientCursorPosition(), "Recruiting");
+   }
+   if (IS_KEY_PRESSED('L') && m_pSelectedBot->isPossessed() && m_pSelectedBot->GetTeam() && (m_pSelectedBot->GetTeam()->Leader() == m_pSelectedBot))
+   {
+       gdi->TextColor(0, 255, 0);
+       gdi->TextAtPos(GetClientCursorPosition(), "Team drops location");
    }
   }
 }

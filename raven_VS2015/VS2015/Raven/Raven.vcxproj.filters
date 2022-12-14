@@ -283,6 +283,9 @@
     <ClCompile Include="goals\FollowLeaderGoal_Evaluator.cpp">
       <Filter>AI\goals\goal evaluation</Filter>
     </ClCompile>
+    <ClCompile Include="Trigger_WeaponDrop.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Raven_Bot.h">
@@ -636,6 +639,7 @@
     <ClInclude Include="goals\FollowLeaderGoal_Evaluator.h">
       <Filter>AI\goals\goal evaluation</Filter>
     </ClInclude>
+    <ClInclude Include="Trigger_WeaponDrop.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Params.lua">

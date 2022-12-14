@@ -403,6 +403,32 @@ Vector2D Raven_Steering::Separation(const std::list<Raven_Bot*>& neighbors)
   return SteeringForce;
 }
 
+//------------------------- Offset Pursuit -------------------------------
+//
+//  Produces a steering force that keeps a vehicle at a specified offset
+//  from a leader vehicle
+//------------------------------------------------------------------------
+Vector2D Raven_Steering::OffsetPursuit(const Raven_Bot* leader,
+    const Vector2D offset)
+{
+    //calculate the offset's position in world space
+    Vector2D WorldOffsetPos = PointToWorldSpace(offset,
+        leader->Heading(),
+        leader->Side(),
+        leader->Pos());
+
+    Vector2D ToOffset = WorldOffsetPos - m_pRaven_Bot->Pos();
+
+    //the lookahead time is propotional to the distance between the leader
+    //and the pursuer; and is inversely proportional to the sum of both
+    //agent's velocities
+    double LookAheadTime = ToOffset.Length() /
+        (m_pRaven_Bot->MaxSpeed() + leader->Speed());
+
+    //now Arrive at the predicted future position of the offset
+    return Arrive(WorldOffsetPos + leader->Velocity() * LookAheadTime, fast);
+}
+
 
 
 

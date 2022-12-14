@@ -6,7 +6,7 @@ Il s’agit de simuler des agents –bots- qui s’entretuent. Chaque agent est 
 ## Améliorations
 
 ### #1 Amelioration de la fuzzification pour le choix d’une arme de type 'RocketLauncher'
-_ Camille Boucher _
+*Camille Boucher*
 
 Augmentation à 5 ensembles flous : 
 - distance de la cible - close , medium, far - 
@@ -17,7 +17,7 @@ Augmentation à 5 ensembles flous :
 
 
 ### #2 Introduction d'un comportement flou pour la visée du tir
-_ Camille Boucher _
+*Camille Boucher*
 
 La déviation d’un tir –trajectoire d’une balle- est en fonction des variables floues suivantes : 
 - la distance à la cible - close , medium, far - 
@@ -26,29 +26,49 @@ La déviation d’un tir –trajectoire d’une balle- est en fonction des varia
 
 Cette fuzzification a été ajoutée à la classe 'Raven_WeaponSystem', et la deviation est ajoutee dans l'appel de la fonction 'TakeAimAndShoot'.
 
+
 ### #3 Equipe
-_ Tristan Badana _
+*Tristan Badana*
 
 Possibilité de créer une équipe lors du contrôle d'un bot en appuyant sur la touche R et en cliquant sur un autre bot (ce qui le recrute dans l'équipe).
 On peut recruter d'autres membres de la même façon à part s'ils sont déjà dans une équipe. Les membres de l'équipe voient apparaître un cercle de couleur (qui est la couleur de l'équipe) sous leur pied afin de les différencier. Le leader a les cheveux jaunes.
 
-_ Tristan Badana _
+
+*Tristan Badana*
 
 Possibilité d'ordonner aux membres de l'équipe de prioriser leurs tir sur une cible sélectionnée par le leader (en appuyant sur la touche T et en cliquant sur un bot),  Cette désignation se traduit par un envoi de message aux membres de l’équipe. Lorsque l'on fait un clic gauche sur un bot, la cible qu'il vise en priorité est marquée par une cible rouge sous ses pieds. Si le bot voit le bot qu'il cible, alors il lui tirera dessus même s'il était en combat contre un autre bot.
 
 
+*Nathan Guerin*
+
+Possibilité de définir un lieu de dépôt des armes lorsqu'un membre d'une équipe est éliminé. Pour ajouter/modifier la position, il faut être en possession du leader de l'équipe, puis appuyer sur la touche ***L*** et cliquer à l'endroit désiré.
 
 ### #3 Ajout d'un nouveau but
-_ Evan Touzet _
+*Evan Touzet*
 
 Ajout d'un nouveau but, lorsque le bot fait partie d'une équipe, il peut prendre la décision de rejoindre son leader afin de pouvoir attaquer des ennemis à plusieurs. 
 
 
 ### #Bonus
 #### Creation d'une nouvelle arme : grenade
-_ Camille Boucher _
+*Camille Boucher*
 
 Creation d'une nouvelle arme grenade et son projectile associe : bombe grenade. La particularite de ce projectile est qu'il est à usage unique.
 La creation de cette arme et de ce projectile ont necessite des changements dans beaucoup de fichiers : dans les fichiers main, du jeu, du systeme des armes, de la gestion des buts, les paramtres, etc.
 La map initiale a été modifée pour generer une grenade au debut du jeu (cercle simple noir).
 
+
+#### Stratégie de comportement au sein d'une équipe
+*Nathan Guerin*
+
+Ajout du comportement de déplacement OffsetPursuit. Pour déclencher ce comportement, il faut être en possession du leader d'une équipe, et d'appuyer sur la touche ***O***, afin d'ordonner aux autres membres de l'équipe de se mettre en formation autour du leader, pour le protéger.
+
+----
+
+## Membres du groupe
+
+* [Tristan Badana](mailto:tbadana@etu.uqac.ca)
+* [Alexandre Bourdarie](mailto:abourdarie@etu.uqac.ca)
+* [Camille Boucher](mailto:cboucher17@etu.uqac.ca)
+* [Nathan Guerin](mailto:nguerin5@etu.uqac.ca)
+* [Evan Touzet](mailto:etouzet@etu.uqac.ca)

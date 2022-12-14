@@ -8,12 +8,14 @@
 #include "Debug/DebugConsole.h"
 
 #include <algorithm>
+#include <Triggers/Trigger.h>
 
 //-------------------------- ctor ---------------------------------------------
 Raven_Team::Raven_Team(Raven_Bot* leader) :
     m_leader(leader),
     m_members(NULL),
-    m_icolor(RandInt(0,13))
+    m_icolor(RandInt(0,13)),
+    m_pDropoutLocation()
 {
 }
 
@@ -90,6 +92,16 @@ void Raven_Team::AddMember(Raven_Bot* newMem) {
 
 }
 
+//---------------------------- SetDropoutLocation -----------------------------
+// 
+// sets the weapon's dropout location
+//-----------------------------------------------------------------------------
+void Raven_Team::SetDropoutLocation(POINTS p)
+{
+    m_pDropoutLocation = p;
+    //TODO: create a WeaponDrop trigger 
+    debug_con << "Set weapon drops location here : " << p.x << " / " << p.y << "";
+}
 
 //---------------------------- Describe ---------------------------------------
 // 

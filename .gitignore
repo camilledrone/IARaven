@@ -398,3 +398,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 /raven_VS2015/VS2015/Raven/DebugLog.txt
+/raven_VS2015/VS2015/Raven/Raven.vcxproj

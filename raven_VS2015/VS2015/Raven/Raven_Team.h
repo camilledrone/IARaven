@@ -27,6 +27,8 @@ private:
 	std::vector<Raven_Bot*>			m_members;
 	//Team color
 	int								m_icolor;
+	// the weapons dropout location
+	POINTS                          m_pDropoutLocation;
 
 
 	//teams shouldn't be copied, only created or respawned
@@ -44,13 +46,14 @@ public:
 	void         Read(std::ifstream& is) {/*not implemented*/ }
 
 	void		 AddMember(Raven_Bot* newMem);
+	void		 SetDropoutLocation(POINTS p);
 	void		 Describe();
 
 	//methods for accessing attribute data
 	Raven_Bot*					Leader()const { return m_leader; }
 	std::vector<Raven_Bot*>		Members()const { return m_members; }
 	int							Color()const { return m_icolor; }
-
+	POINTS                      GetDropoutLocation()const { return m_pDropoutLocation; }
 };
 
 
