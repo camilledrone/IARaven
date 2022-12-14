@@ -15,6 +15,8 @@
 #include "2d/vector2d.h"
 #include "Fuzzy/FuzzyModule.h"
 
+#include"armory/Raven_Weapon.h"
+
 class Raven_Bot;
 class Raven_Weapon;
 
@@ -90,7 +92,11 @@ public:
   //this method aims the bot's current weapon at the target (if there is a
   //target) and, if aimed correctly, fires a round. (Called each update-step
   //from Raven_Bot::Update)
+<<<<<<< Updated upstream:raven_VS2015/VS2015/Raven/Raven_WeaponSystem.h
   void          TakeAimAndShoot();
+=======
+  bool          TakeAimAndShoot();
+>>>>>>> Stashed changes:raven_VS2015/VS2015/Buckland_Chapter7 to 10_Raven/Raven_WeaponSystem.h
 
   //this method determines the most appropriate weapon to use given the current
   //game state. (Called every n update-steps from Raven_Bot::Update)

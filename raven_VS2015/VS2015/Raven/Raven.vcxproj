@@ -219,9 +219,15 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+<<<<<<< Updated upstream:raven_VS2015/VS2015/Raven/Raven.vcxproj
     <ClCompile Include="armory\Weapon_Grenade.cpp" />
     <ClCompile Include="goals\FollowLeaderGoal_Evaluator.cpp" />
     <ClCompile Include="goals\Goal_FollowLeader.cpp" />
+=======
+    <ClCompile Include="BotApprenant.cpp" />
+    <ClCompile Include="code_source_reseaux_neuronnes\CData.cpp" />
+    <ClCompile Include="code_source_reseaux_neuronnes\CNeuralNet.cpp" />
+>>>>>>> Stashed changes:raven_VS2015/VS2015/Buckland_Chapter7 to 10_Raven/Raven.vcxproj
     <ClCompile Include="main.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -542,10 +548,16 @@
     <ClCompile Include="Trigger_WeaponDrop.cpp" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< Updated upstream:raven_VS2015/VS2015/Raven/Raven.vcxproj
     <ClInclude Include="armory\Weapon_Grenade.h" />
     <ClInclude Include="armory\Projectile_BombGrenade.h" />
     <ClInclude Include="goals\FollowLeaderGoal_Evaluator.h" />
     <ClInclude Include="goals\Goal_FollowLeader.h" />
+=======
+    <ClInclude Include="BotApprenant.h" />
+    <ClInclude Include="code_source_reseaux_neuronnes\CData.h" />
+    <ClInclude Include="code_source_reseaux_neuronnes\CNeuralNet.h" />
+>>>>>>> Stashed changes:raven_VS2015/VS2015/Buckland_Chapter7 to 10_Raven/Raven.vcxproj
     <ClInclude Include="Raven_Bot.h" />
     <ClInclude Include="Raven_Game.h" />
     <ClInclude Include="Raven_Map.h" />
@@ -666,6 +678,7 @@
     <None Include="note.txt" />
     <None Include="maps\Raven_DM1.map" />
     <None Include="maps\Raven_DM1_Doors.map" />
+    <None Include="UpgradeLog.html" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Script1.rc">
