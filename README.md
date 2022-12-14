@@ -26,6 +26,18 @@ La déviation d’un tir –trajectoire d’une balle- est en fonction des varia
 
 Cette fuzzification a été ajoutée à la classe 'Raven_WeaponSystem', et la deviation est ajoutee dans l'appel de la fonction 'TakeAimAndShoot'.
 
+### #3 Equipe
+_ Tristan Badana _
+
+Possibilité de créer une équipe lors du contrôle d'un bot en appuyant sur la touche R et en cliquant sur un autre bot (ce qui le recrute dans l'équipe).
+On peut recruter d'autres membres de la même façon à part s'ils sont déjà dans une équipe. Les membres de l'équipe voient apparaître un cercle de couleur (qui est la couleur de l'équipe) sous leur pied afin de les différencier. Le leader a les cheveux jaunes.
+
+_ Tristan Badana _
+
+Possibilité d'ordonner aux membres de l'équipe de prioriser leurs tir sur une cible sélectionnée par le leader (en appuyant sur la touche T et en cliquant sur un bot),  Cette désignation se traduit par un envoi de message aux membres de l’équipe. Lorsque l'on fait un clic gauche sur un bot, la cible qu'il vise en priorité est marquée par une cible rouge sous ses pieds. Si le bot voit le bot qu'il cible, alors il lui tirera dessus même s'il était en combat contre un autre bot.
+
+
+
 ### #3 Ajout d'un nouveau but
 _ Evan Touzet _
 
