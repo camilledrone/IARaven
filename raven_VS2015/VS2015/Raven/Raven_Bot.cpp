@@ -83,15 +83,12 @@ Raven_Bot::Raven_Bot(Raven_Game* world,Vector2D pos):
                                         script->GetDouble("Bot_AimPersistance"));
 
   m_pSensoryMem = new Raven_SensoryMemory(this, script->GetDouble("Bot_MemorySpan"));
-<<<<<<< Updated upstream:raven_VS2015/VS2015/Raven/Raven_Bot.cpp
 
   debug_con << "\nm_dMaxSpeed : " << m_dMaxSpeed;
-=======
     
   //initialisation pour les données d'observation du training set
   m_vecObservation = std::vector<double>(0);
   m_vecTarget = std::vector<double>(0);
->>>>>>> Stashed changes:raven_VS2015/VS2015/Buckland_Chapter7 to 10_Raven/Raven_Bot.cpp
 }
 
 //-------------------------------- dtor ---------------------------------------

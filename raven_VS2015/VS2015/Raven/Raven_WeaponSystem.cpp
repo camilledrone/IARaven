@@ -263,11 +263,7 @@ void Raven_WeaponSystem::ChangeWeapon(unsigned int type)
 //  this method aims the bots current weapon at the target (if there is a
 //  target) and, if aimed correctly, fires a round
 //-----------------------------------------------------------------------------
-<<<<<<< Updated upstream:raven_VS2015/VS2015/Raven/Raven_WeaponSystem.cpp
-void Raven_WeaponSystem::TakeAimAndShoot()
-=======
 bool Raven_WeaponSystem::TakeAimAndShoot()
->>>>>>> Stashed changes:raven_VS2015/VS2015/Buckland_Chapter7 to 10_Raven/Raven_WeaponSystem.cpp
 {
   //aim the weapon only if the current target is shootable or if it has only
   //very recently gone out of view (this latter condition is to ensure the 

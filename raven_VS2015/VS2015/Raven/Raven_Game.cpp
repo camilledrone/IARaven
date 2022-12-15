@@ -204,7 +204,7 @@ void Raven_Game::Update()
 
       //de temps en temps (une fois sur 2) créer un bot apprenant, lorqu'un un bot meurt.
       //la fonction RandBool) rend vrai une fois sur 2.
-      if (m_estEntraine & RandBool()) {
+      if (m_estEntraine && RandBool()) {
           AddBots(1, true);
       }
     }
@@ -215,7 +215,7 @@ void Raven_Game::Update()
       (*curBot)->Update();
 
       //on crée un échantillon de 200 observations. Juste assez pour ne pas s'accaparer de la mémoire...
-      if ((m_TrainingSet.GetInputSet().size() < 200) & ((*curBot)->Score() > 1)) {
+      if ((m_TrainingSet.GetInputSet().size() < 200) && ((*curBot)->Score() > 1)) {
 
           //ajouter une observation au jeu d'entrainement
           AddData((*curBot)->GetDataShoot(), (*curBot)->GetTargetShoot());
@@ -248,7 +248,7 @@ void Raven_Game::Update()
   //Lancer l'apprentissage quand le jeu de données est suffisant
 //la fonction d'apprentissage s'effectue en parallèle : thread
 
-  if ((m_TrainingSet.GetInputSet().size() >= 200) & (!m_LancerApprentissage)) {
+  if ((m_TrainingSet.GetInputSet().size() >= 200) && (!m_LancerApprentissage)) {
 
 
       debug_con << "On passe par la" << "";

@@ -49,6 +49,27 @@ Possibilité de définir un lieu de dépôt des armes lorsqu'un membre d'une éq
 Ajout d'un nouveau but, lorsque le bot fait partie d'une équipe, il peut prendre la décision de rejoindre son leader afin de pouvoir attaquer des ennemis à plusieurs. 
 
 
+### #4 Création de bots apprenants et ajout d'un réseau de neuronnes
+*Alexandre Bourdarie*
+
+J'ai commencé par ajouter les fonctions nécéssaires au réseau de neuronnes dans le dossier code_source_reseaux_neuronnes. 
+A l'interieur on peut trouver la création des datatables et des perceptrons qui vont être utilisés pour définir le comportement des bots.
+J'ai essayé de rajouter un perceptron dans le système et les nouveaux bots crées vont reproduire le schéma de tir de joueur grâce à 6 critères :
+
+* la distance 
+* Les munitions 
+* la vie restante 
+* L'arme actuelle 
+* le nombre d'allié.
+
+J'ai changé les fichiers Raven Bot pour modifier leurs conditions de tir.
+Le bot apprenant ne peut pas tirer tant que le dataset n'a pas été généré.
+La classe que j'ai ajouté est Botapprenant. 
+
+Merci
+
+
+
 ### #Bonus
 #### Creation d'une nouvelle arme : grenade
 *Camille Boucher*

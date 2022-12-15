@@ -141,7 +141,7 @@ public:
 
 
 	//calculates the outputs from a set of inputs
-	vector<double>	Update(vector<double> inputs);
+  vector<double>	Update(vector<double> inputs);
 
   //trains the network given a training set. Returns false if
   //there is an error with the data sets

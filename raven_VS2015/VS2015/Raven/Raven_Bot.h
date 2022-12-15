@@ -118,15 +118,11 @@ protected:
   //the buffer for the transformed vertices
   std::vector<Vector2D>              m_vecBotVBTrans;
 
-<<<<<<< Updated upstream:raven_VS2015/VS2015/Raven/Raven_Bot.h
-=======
   //apprentissage. 
   //donnee à enregistrer décrivant une situation de comportement de l'agent 
   std::vector<double> m_vecObservation; //distance-target, visibilite, quantite-arme, type arme, son niveau de vie
   std::vector<double> m_vecTarget; //classe representer sous d'un vecteur de sortie. 
 
-
->>>>>>> Stashed changes:raven_VS2015/VS2015/Buckland_Chapter7 to 10_Raven/Raven_Bot.h
   //bots shouldn't be copied, only created or respawned
   Raven_Bot(const Raven_Bot&);
   Raven_Bot& operator=(const Raven_Bot&);
