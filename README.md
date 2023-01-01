@@ -1,92 +1,90 @@
 # IARaven
 
-Ce projet est une adaptation du code source des chapitres 7-10 du livre de Mat Buckland, afin d’améliorer le jeu « Raven ».
-Il s’agit de simuler des agents –bots- qui s’entretuent. Chaque agent est dirigé par un ou plusieurs buts tels que, sedéplacer vers un item (trousse de soins, munitions), attaquer une cible, explorer l’environnement,.... Ces bots se déplacent en suivant une carte qui consiste en un ensemble de chambres, de couloirs, et plusieurs points de génération.
+This project is an adaptation of the source code of chapters 7-10 of Mat Buckland's book, in order to improve the game "Raven".
+It simulates agents -bots- that kill each other. Each agent is directed by one or more goals such as moving to an item (medical kit, ammunition), attacking a target, exploring the environment, .... These bots move along a map that consists of a set of rooms, corridors, and several generation points.
 
-## Améliorations
 
-### #1 Amelioration de la fuzzification pour le choix d’une arme de type 'RocketLauncher'
+## Improvements
+
+### #1 Improved fuzzification for 'RocketLauncher' weapon selection
 *Camille Boucher*
 
-Augmentation à 5 ensembles flous : 
-- distance de la cible - close , medium, far - 
-- etat des munitions - loads, okay, low -
-- etat de vie - low, medium, high - 
-- score - low, medium, hugh -
+Increase to 5 fuzzy sets: 
+- distance to target - close, medium, far - 
+- ammo status - loads, okay, low -
+- life status - low, medium, high - 
+- score - low, medium, high -
 - desirability - undesirable, desirable, very desirable -
 
 
-### #2 Introduction d'un comportement flou pour la visée du tir
+### #2 Introduction of a fuzzy behaviour for the aiming of the shot
 *Camille Boucher*
 
-La déviation d’un tir –trajectoire d’une balle- est en fonction des variables floues suivantes : 
-- la distance à la cible - close , medium, far - 
-- la vélocité  - low, medium, high - 
-- la période pendant laquelle la cible est demeurée visible - short, medium, long -
+The deviation of a shot -the trajectory of a bullet- is a function of the following fuzzy variables 
+- the distance to the target - close, medium, far - 
+- the velocity - low, medium, high - 
+- the period during which the target remained visible - short, medium, long -.
 
-Cette fuzzification a été ajoutée à la classe 'Raven_WeaponSystem', et la deviation est ajoutee dans l'appel de la fonction 'TakeAimAndShoot'.
+This fuzzification has been added to the 'Raven_WeaponSystem' class, and the deviation is added in the 'TakeAimAndShoot' function call.
 
 
-### #3 Equipe
+### #3 Team
 *Tristan Badana*
 
-Possibilité de créer une équipe lors du contrôle d'un bot en appuyant sur la touche R et en cliquant sur un autre bot (ce qui le recrute dans l'équipe).
-On peut recruter d'autres membres de la même façon à part s'ils sont déjà dans une équipe. Les membres de l'équipe voient apparaître un cercle de couleur (qui est la couleur de l'équipe) sous leur pied afin de les différencier. Le leader a les cheveux jaunes.
+Ability to create a team when controlling a bot by pressing the R key and clicking on another bot (which recruits it into the team).
+Other members can be recruited in the same way except if they are already in a team. Team members have a coloured circle (which is the colour of the team) under their foot to differentiate them. The leader has yellow hair.
 
 
 *Tristan Badana*
 
-Possibilité d'ordonner aux membres de l'équipe de prioriser leurs tir sur une cible sélectionnée par le leader (en appuyant sur la touche T et en cliquant sur un bot),  Cette désignation se traduit par un envoi de message aux membres de l’équipe. Lorsque l'on fait un clic gauche sur un bot, la cible qu'il vise en priorité est marquée par une cible rouge sous ses pieds. Si le bot voit le bot qu'il cible, alors il lui tirera dessus même s'il était en combat contre un autre bot.
-
+Ability to order team members to prioritize their shots at a target selected by the leader (by pressing the T key and clicking on a bot), This designation results in a message being sent to team members. When a bot is left-clicked, the target it is aiming at is marked by a red target under its feet. If the bot sees the bot it is targeting, then it will shoot it even if it was in combat with another bot.
 
 *Nathan Guerin*
 
-Possibilité de définir un lieu de dépôt des armes lorsqu'un membre d'une équipe est éliminé. Pour ajouter/modifier la position, il faut être en possession du leader de l'équipe, puis appuyer sur la touche ***L*** et cliquer à l'endroit désiré.
+Ability to set a weapon drop-off location when a team member is eliminated. To add/modify the position, you must be in possession of the team leader, then press the ***L*** key and click on the desired location.
 
-### #3 Ajout d'un nouveau but
+### #3 Adding a new goal
 *Evan Touzet*
 
-Ajout d'un nouveau but, lorsque le bot fait partie d'une équipe, il peut prendre la décision de rejoindre son leader afin de pouvoir attaquer des ennemis à plusieurs. 
+Added a new goal, when the bot is part of a team, it can make the decision to join its leader in order to attack enemies in a group. 
 
 
-### #4 Création de bots apprenants et ajout d'un réseau de neuronnes
+### #4 Creation of learning bots and addition of a neural network
 *Alexandre Bourdarie*
 
-J'ai commencé par ajouter les fonctions nécéssaires au réseau de neuronnes dans le dossier code_source_reseaux_neuronnes. 
-A l'interieur on peut trouver la création des datatables et des perceptrons qui vont être utilisés pour définir le comportement des bots.
-J'ai essayé de rajouter un perceptron dans le système et les nouveaux bots crées vont reproduire le schéma de tir de joueur grâce à 6 critères :
+I started by adding the neural network functions in the folder code_source_neural_networks. 
+Inside we can find the creation of datatables and perceptrons that will be used to define the behaviour of the bots.
+I tried to add a perceptron in the system and the new bots created will reproduce the player's shooting pattern thanks to 6 criteria:
 
-* la distance 
-* Les munitions 
-* la vie restante 
-* L'arme actuelle 
-* le nombre d'allié.
+* Distance 
+* Ammunition 
+* Remaining life 
+* Current weapon 
+* Number of allies.
 
-J'ai changé les fichiers Raven Bot pour modifier leurs conditions de tir.
-Le bot apprenant ne peut pas tirer tant que le dataset n'a pas été généré.
-La classe que j'ai ajouté est Botapprenant. 
-
-Merci
+I changed the Raven Bot files to modify their firing conditions.
+The learning bot can't shoot until the dataset has been generated.
+The class I added is Botapprenant. 
 
 
 
 ### #Bonus
-#### Creation d'une nouvelle arme : grenade
+#### Creation of a new weapon: grenade
 *Camille Boucher*
 
-Creation d'une nouvelle arme grenade et son projectile associe : bombe grenade. La particularite de ce projectile est qu'il est à usage unique.
-La creation de cette arme et de ce projectile ont necessite des changements dans beaucoup de fichiers : dans les fichiers main, du jeu, du systeme des armes, de la gestion des buts, les paramtres, etc.
-La map initiale a été modifée pour generer une grenade au debut du jeu (cercle simple noir).
+Creation of a new grenade weapon and its associated projectile: grenade bomb. The particularity of this projectile is that it is single-use.
+The creation of this weapon and projectile required changes in many files: in the main files, in the game, in the weapon system, in the goal management, in the parameters, etc.
+The initial map was modified to generate a grenade at the beginning of the game (single black circle).
 
 
-#### Stratégie de comportement au sein d'une équipe
+#### Team behaviour strategy
 *Nathan Guerin*
 
-Ajout du comportement de déplacement OffsetPursuit. Pour déclencher ce comportement, il faut être en possession du leader d'une équipe, et d'appuyer sur la touche ***O***, afin d'ordonner aux autres membres de l'équipe de se mettre en formation autour du leader, pour le protéger.
+Added the OffsetPursuit movement behaviour. To trigger this behaviour, you need to be in possession of the leader of a team, and press the ***O*** key, in order to order the other team members to form up around the leader, to protect him.
 
 ----
 
-## Membres du groupe
+## Team members
 
 * [Tristan Badana (BADT14010201)](mailto:tbadana@etu.uqac.ca)
 * [Alexandre Bourdarie (BOUA28070007)](mailto:abourdarie@etu.uqac.ca)
